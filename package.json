@@ -3,5 +3,16 @@
   "version": "1.0.0",
   "main": "index.js",
   "author": "James Waples <james@wapl.es>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "ava": "^1.4.1",
+    "ava-ts": "^0.25.2",
+    "funfix": "^7.0.1",
+    "io-ts": "^1.8.6",
+    "ts-node": "^8.1.0",
+    "typescript": "^3.4.5"
+  },
+  "scripts": {
+    "test": "ava-ts"
+  }
 }

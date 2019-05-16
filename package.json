@@ -1,0 +1,7 @@
+{
+  "name": "experimental-event-store",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "James Waples <james@wapl.es>",
+  "license": "MIT"
+}

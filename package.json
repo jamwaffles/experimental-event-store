@@ -10,6 +10,7 @@
     "funfix": "^7.0.1",
     "io-ts": "^1.8.6",
     "ts-node": "^8.1.0",
+    "typeorm": "^0.2.17",
     "typescript": "^3.4.5"
   },
   "scripts": {

@@ -1,52 +1,54 @@
 import * as T from 'io-ts';
-import { Either, Left, Right } from 'funfix';
+import { Either, Left, Right, Future } from 'funfix';
 
-import { oneEventDef, secondThingDef, thirdBlahDef } from './events';
+import { OneEvent, oneEventDef, secondThingDef, thirdBlahDef } from './events';
 
-interface Aggregator<E> {
-    save(event: E): Promise<Either<string, E>>;
+interface Aggregator<EV, ENT> {
+    // constructor(create: CEV): ENT;
+
+    apply(event: EV): ENT;
 }
-
-const thingPropsDef = T.interface({
-    foo: T.string,
-    bar: T.Integer,
-});
-
-type ThingProps = T.TypeOf<typeof thingPropsDef>;
 
 const thingEventsDef = T.union([oneEventDef, secondThingDef]);
 
 type ThingEvents = T.TypeOf<typeof thingEventsDef>;
 
-export class Thing implements ThingProps, Aggregator<ThingEvents> {
-    public foo: string;
-    public bar: number;
+export class Thing implements Aggregator<ThingEvents, Thing> {
+    public readonly foo: string;
+    public readonly bar: number;
 
-    public constructor(entity: ThingProps) {
-        const { foo, bar } = entity;
+    // Accepts ThingCreated event - pattern
+    // Force constructor to take *Created "gensisis" event
+    // Event must be create externally
+    public constructor(create: OneEvent) {
+        const { foo } = create;
 
         this.foo = foo;
-        this.bar = bar;
+        this.bar = 100;
+
+        return this;
     }
 
-    public is_valid(): boolean {
-        return thingPropsDef
-            .decode(this)
-            .map((r) => true)
-            .getOrElse(false);
-    }
-
-    public async save(
+    // Does not save events, returns SAME entitiy with event applied to it
+    public apply(
+        // TODO: Omit `OneEvent` creation event
         event: ThingEvents,
-    ): Promise<any> {
-        return thingEventsDef
-            .decode(event)
-            .map(async (event) => {
-                // Artificial delay
-                await new Promise((resolve) => setTimeout(resolve, 100));
+    ): Thing {
+        // TODO: Apply `event` using aggregate event handler thingies
+        // TODO: Validate event
 
-                return Promise.resolve(event);
-            })
-            .mapLeft(() => 'Bad');
+        // TODO: Keep changelog of applied events since read
+
+        return this
+    }
+
+    // Save self to DB (TypeOrm probably does this for us)
+    // Return NEW entity
+    public async save(store: any): Promise<Thing> {
+        // Go through "changelog" and save all events
+
+        // TODO: Emit events
+
+        return this;
     }
 }

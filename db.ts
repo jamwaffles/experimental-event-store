@@ -71,8 +71,7 @@ const thing: OneEvent = {
         purge: None
     },
     data: Some({
-        foo: 'bar',
-        blah: true,
+        foo: 'bar'
     })
 };
 
@@ -84,5 +83,5 @@ const blahOpt = optionDef(blah);
 
 type BlahOpt = T.TypeOf<typeof blahOpt>;
 
-const bobs: BlahOpt = Some({ baz: 'asdas' });
+const bobs: BlahOpt = Option.of({ baz: 'asdas', buz: 'as' });
 

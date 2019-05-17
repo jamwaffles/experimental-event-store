@@ -1,18 +1,24 @@
 import * as T from 'io-ts';
 import { Either, Left, Right } from 'funfix';
 
-interface Entity {
-    do_something(): void;
+import { oneEventDef, secondThingDef, thirdBlahDef } from './events';
+
+interface Aggregator<E> {
+    save(event: E): Promise<Either<string, E>>;
 }
 
-const thingDef = T.interface({
+const thingPropsDef = T.interface({
     foo: T.string,
-    bar: T.Integer
+    bar: T.Integer,
 });
 
-type ThingProps = T.TypeOf<typeof thingDef>;
+type ThingProps = T.TypeOf<typeof thingPropsDef>;
 
-export class Thing implements Entity, ThingProps {
+const thingEventsDef = T.union([oneEventDef, secondThingDef]);
+
+type ThingEvents = T.TypeOf<typeof thingEventsDef>;
+
+export class Thing implements ThingProps, Aggregator<ThingEvents> {
     public foo: string;
     public bar: number;
 
@@ -24,10 +30,23 @@ export class Thing implements Entity, ThingProps {
     }
 
     public is_valid(): boolean {
-        return thingDef.decode(this).map((r) => true).getOrElse(false)
+        return thingPropsDef
+            .decode(this)
+            .map((r) => true)
+            .getOrElse(false);
     }
 
-    public do_something(): void {
-        console.log("I did something")
+    public async save(
+        event: ThingEvents,
+    ): Promise<any> {
+        return thingEventsDef
+            .decode(event)
+            .map(async (event) => {
+                // Artificial delay
+                await new Promise((resolve) => setTimeout(resolve, 100));
+
+                return Promise.resolve(event);
+            })
+            .mapLeft(() => 'Bad');
     }
 }

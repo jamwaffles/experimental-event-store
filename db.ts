@@ -23,7 +23,7 @@ export const eventDef = <
     NS extends T.LiteralC<any>,
     TY extends T.LiteralC<any>,
     ETY extends T.LiteralC<any>,
-    D extends T.Mixed
+    D extends T.InterfaceType<any>
 >(
     event_namespace: NS,
     event_type: TY,
@@ -38,7 +38,7 @@ export const eventDef = <
         entity_id: uuidDef,
         entity_type,
         created_at: isoDateDef,
-        data: optionDef(data),
+        data: optionDef(T.exact(data)),
         context: contextDef
     });
 

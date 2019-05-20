@@ -2,6 +2,7 @@ import * as T from 'io-ts';
 import * as FP from 'fp-ts/lib/Either';
 import { PartialType, InterfaceType } from 'io-ts';
 import { Option, None, Some, Either } from 'funfix';
+import { v4 } from 'uuid';
 
 interface UuidBrand {
   readonly Uuid: unique symbol;
@@ -73,17 +74,19 @@ const Context = T.interface({
 export type Purge = T.TypeOf<typeof Purge>;
 export type Context = T.TypeOf<typeof Context>;
 
-export interface Event<D> {
-  id: Uuid;
-  sequence_number: number;
-  event_namespace: string;
-  event_type: string;
-  entity_id: Uuid;
-  entity_type: string;
-  created_at: Rfc3339Date;
-  data: Option<D>;
-  context: Context;
-}
+export const Event = T.interface({
+  id: Uuid,
+  sequence_number: T.Integer,
+  event_namespace: T.string,
+  event_type: T.string,
+  entity_id: Uuid,
+  entity_type: T.string,
+  created_at: Rfc3339Date,
+  data: T.strict({}),
+  context: Context
+});
+
+export type Event = T.TypeOf<typeof Event>;
 
 export const eventDef = <
   NS extends T.LiteralC<any>,
@@ -97,13 +100,40 @@ export const eventDef = <
   data: D
 ) =>
   T.interface({
-    id: Uuid,
-    sequence_number: T.Integer,
+    ...Event.props,
     event_namespace,
     event_type,
-    entity_id: Uuid,
     entity_type,
-    created_at: Rfc3339Date,
-    data: optionDef(T.exact(data)),
-    context: Context
+    data: T.exact(data)
   });
+
+export function createEvent<E extends Event>(
+  event_namespace: E['event_namespace'],
+  event_type: E['event_type'],
+  entity_type: E['entity_type'],
+  entity_id: Uuid,
+  data: E['data']
+): E {
+  return ({
+    id: v4(),
+    sequence_number: null,
+    event_namespace,
+    event_type,
+    entity_id,
+    entity_type,
+    created_at: new Date().toISOString(),
+    data,
+    context: {
+      subject_id: '',
+      hostname: '',
+      username: '',
+      ip: None,
+      purge: None
+    }
+  } as unknown) as E;
+}
+
+import { OneEvent } from './events';
+const blah: OneEvent = createEvent<OneEvent>('one', 'Event', 'something', v4(), {
+  foo: 'hello'
+});

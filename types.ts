@@ -55,44 +55,55 @@ export function optionDef<C extends T.Mixed>(codec: C): OptionCodec<C> {
 }
 
 const Purge = T.interface({
-    purged_at: Rfc3339Date,
-    hostname: T.string,
-    username: T.string,
-    ip: optionDef(T.string)
+  purged_at: Rfc3339Date,
+  hostname: T.string,
+  username: T.string,
+  ip: optionDef(T.string)
 });
 
 const Context = T.interface({
-    subject_id: Uuid,
-    hostname: T.string,
-    username: T.string,
-    // TODO: Define IP type
-    ip: optionDef(T.string),
-    purge: optionDef(Purge)
+  subject_id: Uuid,
+  hostname: T.string,
+  username: T.string,
+  // TODO: Define IP type
+  ip: optionDef(T.string),
+  purge: optionDef(Purge)
 });
 
 export type Purge = T.TypeOf<typeof Purge>;
 export type Context = T.TypeOf<typeof Context>;
 
-export const eventDef = <
-    NS extends T.LiteralC<any>,
-    TY extends T.LiteralC<any>,
-    ETY extends T.LiteralC<any>,
-    D extends T.InterfaceType<any>
->(
-    event_namespace: NS,
-    event_type: TY,
-    entity_type: ETY,
-    data: D
-) =>
-    T.interface({
-        id: Uuid,
-        sequence_number: T.Integer,
-        event_namespace,
-        event_type,
-        entity_id: Uuid,
-        entity_type,
-        created_at: Rfc3339Date,
-        data: optionDef(T.exact(data)),
-        context: Context
-    });
+export interface Event<D> {
+  id: Uuid;
+  sequence_number: number;
+  event_namespace: string;
+  event_type: string;
+  entity_id: Uuid;
+  entity_type: string;
+  created_at: Rfc3339Date;
+  data: Option<D>;
+  context: Context;
+}
 
+export const eventDef = <
+  NS extends T.LiteralC<any>,
+  TY extends T.LiteralC<any>,
+  ETY extends T.LiteralC<any>,
+  D extends T.InterfaceType<any>
+>(
+  event_namespace: NS,
+  event_type: TY,
+  entity_type: ETY,
+  data: D
+) =>
+  T.interface({
+    id: Uuid,
+    sequence_number: T.Integer,
+    event_namespace,
+    event_type,
+    entity_id: Uuid,
+    entity_type,
+    created_at: Rfc3339Date,
+    data: optionDef(T.exact(data)),
+    context: Context
+  });

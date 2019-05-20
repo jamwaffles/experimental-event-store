@@ -3,9 +3,8 @@ import { Either, Left, Right, Future } from 'funfix';
 
 import { OneEvent, oneEventDef, secondThingDef, thirdBlahDef } from './events';
 
+// NOTE: `ENT` must be the class that implements `Aggregator`. See [here](https://stackoverflow.com/questions/36744033/how-to-reference-type-of-self-in-typescript-interface-for-a-iclonable-interface) for explanation
 interface Aggregator<EV, ENT> {
-    // constructor(create: CEV): ENT;
-
     apply(event: EV): ENT;
 }
 
@@ -17,13 +16,12 @@ export class Thing implements Aggregator<ThingEvents, Thing> {
     public readonly foo: string;
     public readonly bar: number;
 
-    // Accepts ThingCreated event - pattern
-    // Force constructor to take *Created "gensisis" event
-    // Event must be create externally
-    public constructor(create: OneEvent) {
-        const { foo } = create;
+    // Force constructor to take *Created "genesis" event
+    // Event must be created externally
+    public constructor(event: OneEvent) {
+        // TODO: Run `apply()` with `event`
 
-        this.foo = foo;
+        this.foo = 'something';
         this.bar = 100;
 
         return this;

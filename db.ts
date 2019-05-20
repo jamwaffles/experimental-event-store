@@ -1,23 +1,27 @@
 import * as T from 'io-ts';
 import { Option } from 'funfix';
 
-import { Uuid, uuidDef, rfc3339DateDef, optionDef } from './types';
+import { Uuid, Rfc3339Date, optionDef } from './types';
+import { OneEvent } from './events';
 
-const purgeDef = T.interface({
-    purged_at: rfc3339DateDef,
+const Purge = T.interface({
+    purged_at: Rfc3339Date,
     hostname: T.string,
     username: T.string,
     ip: optionDef(T.string)
 });
 
-const contextDef = T.interface({
-    subject_id: uuidDef,
+const Context = T.interface({
+    subject_id: Uuid,
     hostname: T.string,
     username: T.string,
     // TODO: Define IP type
     ip: optionDef(T.string),
-    purge: optionDef(purgeDef)
+    purge: optionDef(Purge)
 });
+
+export type Purge = T.TypeOf<typeof Purge>;
+export type Context = T.TypeOf<typeof Context>;
 
 export const eventDef = <
     NS extends T.LiteralC<any>,
@@ -31,18 +35,18 @@ export const eventDef = <
     data: D
 ) =>
     T.interface({
-        id: uuidDef,
+        id: Uuid,
         sequence_number: T.Integer,
         event_namespace,
         event_type,
-        entity_id: uuidDef,
+        entity_id: Uuid,
         entity_type,
-        created_at: rfc3339DateDef,
+        created_at: Rfc3339Date,
         data: optionDef(T.exact(data)),
-        context: contextDef
+        context: Context
     });
 
-
+// Test:
 
 import { Some, None } from 'funfix';
 
@@ -52,7 +56,7 @@ const thing: OneEvent = {
     event_namespace: 'one',
     event_type: 'Event',
     entity_id: '',
-    entity_type: 'user',
+    entity_type: 'something',
     created_at: '',
     context: {
         subject_id: '',

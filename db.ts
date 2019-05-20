@@ -42,16 +42,7 @@ export const eventDef = <
         context: contextDef
     });
 
-export const oneEventDef = eventDef(
-    T.literal('one'),
-    T.literal('Event'),
-    T.literal('user'),
-    T.interface({
-        foo: T.string
-    })
-);
 
-export type OneEvent = T.TypeOf<typeof oneEventDef>;
 
 import { Some, None } from 'funfix';
 

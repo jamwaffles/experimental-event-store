@@ -45,7 +45,9 @@ export class Thing implements Aggregator<ThingEvents, Thing> {
     public async save(store: any): Promise<Thing> {
         // Go through "changelog" and save all events
 
-        // TODO: Emit events
+        // Persist self to DB if save is successful
+
+        // TODO: Emit events on successful transaction
 
         return this;
     }

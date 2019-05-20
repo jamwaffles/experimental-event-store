@@ -17,5 +17,8 @@
   },
   "scripts": {
     "test": "ava-ts"
+  },
+  "devDependencies": {
+    "@types/uuid": "^3.4.4"
   }
 }

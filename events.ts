@@ -52,7 +52,7 @@ const thing: OneEvent = {
     ip: None,
     purge: None
   },
-  data: {
+  data: Some({
     foo: 'bar'
-  }
+  })
 };

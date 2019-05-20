@@ -82,7 +82,7 @@ export const Event = T.interface({
   entity_id: Uuid,
   entity_type: T.string,
   created_at: Rfc3339Date,
-  data: T.strict({}),
+  data: optionDef(T.strict({})),
   context: Context
 });
 
@@ -104,7 +104,7 @@ export const eventDef = <
     event_namespace,
     event_type,
     entity_type,
-    data: T.exact(data)
+    data: optionDef(T.exact(data))
   });
 
 export function createEvent<E extends Event>(
@@ -134,6 +134,12 @@ export function createEvent<E extends Event>(
 }
 
 import { OneEvent } from './events';
-const blah: OneEvent = createEvent<OneEvent>('one', 'Event', 'something', v4(), {
-  foo: 'hello'
-});
+const blah: OneEvent = createEvent<OneEvent>(
+  'one',
+  'Event',
+  'something',
+  v4(),
+  Some({
+    foo: 'hello'
+  })
+);

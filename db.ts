@@ -74,14 +74,3 @@ const thing: OneEvent = {
         foo: 'bar'
     })
 };
-
-const blah = T.interface({
-    baz: T.string
-});
-
-const blahOpt = optionDef(blah);
-
-type BlahOpt = T.TypeOf<typeof blahOpt>;
-
-const bobs: BlahOpt = Option.of({ baz: 'asdas', buz: 'as' });
-

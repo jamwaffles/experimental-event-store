@@ -3,6 +3,7 @@ import test from 'ava';
 import { Option, Some, None } from 'funfix';
 
 import { optionDef } from './types';
+import { OneEvent, oneEventDef } from './db';
 
 const optionType = optionDef(T.string);
 

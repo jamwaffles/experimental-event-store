@@ -2,7 +2,7 @@ import * as T from 'io-ts';
 
 import { eventDef } from './types';
 
-export const oneEventDef = eventDef(
+export const OneEvent = eventDef(
   T.literal('one'),
   T.literal('Event'),
   T.literal('something'),
@@ -11,7 +11,7 @@ export const oneEventDef = eventDef(
   })
 );
 
-export const secondThingDef = eventDef(
+export const SecondThing = eventDef(
   T.literal('second'),
   T.literal('Thing'),
   T.literal('something'),
@@ -20,7 +20,7 @@ export const secondThingDef = eventDef(
   })
 );
 
-export const thirdBlahDef = eventDef(
+export const ThirdBlah = eventDef(
   T.literal('third'),
   T.literal('Blah'),
   T.literal('something_else'),
@@ -29,9 +29,9 @@ export const thirdBlahDef = eventDef(
   })
 );
 
-export type OneEvent = T.TypeOf<typeof oneEventDef>;
-export type SecondThing = T.TypeOf<typeof secondThingDef>;
-export type ThirdBlah = T.TypeOf<typeof thirdBlahDef>;
+export type OneEvent = T.TypeOf<typeof OneEvent>;
+export type SecondThing = T.TypeOf<typeof SecondThing>;
+export type ThirdBlah = T.TypeOf<typeof ThirdBlah>;
 
 // Test:
 

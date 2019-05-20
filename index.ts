@@ -2,7 +2,7 @@ import * as T from 'io-ts';
 import { Either as FPEither } from 'fp-ts/lib/Either';
 import { Either, Left, Right, Future } from 'funfix';
 
-import { OneEvent, oneEventDef, secondThingDef, thirdBlahDef } from './events';
+import { OneEvent, SecondThing, ThirdBlah } from './events';
 type ReduceClause<I, O> = (o: I) => O;
 type MatchClause<I> = (o: any) => o is I;
 type Reducer<I, O> = [MatchClause<I>, ReduceClause<I, O>];
@@ -19,7 +19,7 @@ function transform<E, R>(e: FPEither<E, R>): Either<E, R> {
     return e.mapLeft(l => Left(l)).map(r => Right(r)).value;
 }
 
-const ThingEvents = T.union([oneEventDef, secondThingDef]);
+const ThingEvents = T.union([OneEvent, SecondThing]);
 
 type ThingEvents = T.TypeOf<typeof ThingEvents>;
 

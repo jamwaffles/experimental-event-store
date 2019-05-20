@@ -1,10 +1,10 @@
 import * as T from 'io-ts';
 import { Option } from 'funfix';
 
-import { Uuid, uuidDef, isoDateDef, optionDef } from './types';
+import { Uuid, uuidDef, rfc3339DateDef, optionDef } from './types';
 
 const purgeDef = T.interface({
-    purged_at: isoDateDef,
+    purged_at: rfc3339DateDef,
     hostname: T.string,
     username: T.string,
     ip: optionDef(T.string)
@@ -37,7 +37,7 @@ export const eventDef = <
         event_type,
         entity_id: uuidDef,
         entity_type,
-        created_at: isoDateDef,
+        created_at: rfc3339DateDef,
         data: optionDef(T.exact(data)),
         context: contextDef
     });

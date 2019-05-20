@@ -10,13 +10,13 @@ export const uuidDef = T.refinement(
 );
 export type Uuid = T.TypeOf<typeof uuidDef>;
 
-const isoDateRegex = /^\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)$/;
-export const isoDateDef = T.refinement(
+const rfc3339DateRegex = /^([0-9]+)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])[Tt]([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9]|60)(\.[0-9]+)?(([Zz])|([\+|\-]([01][0-9]|2[0-3]):[0-5][0-9]))$/;
+export const rfc3339DateDef = T.refinement(
   T.string,
-  (str) => isoDateRegex.test(str),
-  'ISO-8601',
+  (str) => rfc3339DateRegex.test(str),
+  'RFC-3339',
 );
-export type IsoDate = T.TypeOf<typeof isoDateDef>;
+export type Rfc3339Date = T.TypeOf<typeof rfc3339DateDef>;
 
 export type OptionCodec<C extends T.Mixed> = T.Type<
   Option<T.TypeOf<C>>,
